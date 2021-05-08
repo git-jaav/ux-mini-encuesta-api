@@ -1,0 +1,39 @@
+###################### GENERAL ####################
+###################################################
+swagger:
+  info:
+    title: Mini Encuesta API UX
+    description: Api de prueba basada en Spring boot
+    version: 1.0.0
+    contact:
+      name: José Alfonso Arauco Villar - JAAV
+      url: localhost:8080
+      email: araucovillar@gmail.com
+
+spring:
+  profiles:
+    active: dev
+
+---
+###################################################
+#### PROFILE PROD ##################################
+spring:
+  profiles: prod
+  application:
+    name: miniencuesta-ux
+
+server:
+  port: ${vcap.application.port:${PORT}}
+
+---
+###################################################
+###################### PROFILE DEV ####################
+###################################################
+spring:
+  profiles: dev
+  application:
+    name: miniencuesta-ux
+
+
+server:
+  port: ${vcap.application.port:8089}

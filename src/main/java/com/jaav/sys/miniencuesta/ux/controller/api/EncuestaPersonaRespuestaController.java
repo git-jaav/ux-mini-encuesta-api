@@ -143,5 +143,27 @@ public class EncuestaPersonaRespuestaController {
         }
     }
 
-
+    @PostMapping(value = "/" ,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "guardar" ,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            httpMethod = "POST"
+            //response = MeEncuestaTema[].class
+    )
+    @ApiResponses({
+            @ApiResponse( code = 200, message = "ok",response = EncuestaPersonaRespuestaBean.class),
+            @ApiResponse( code = 400, message = "BAD RQ",response = Exception.class)
+    })
+    public ResponseEntity<EncuestaPersonaRespuestaBean> guardar(
+            @RequestBody EncuestaPersonaRespuestaBean objJson){
+        try {
+            return new ResponseEntity<EncuestaPersonaRespuestaBean>(
+                    encuestaAlternativaService.save(objJson)
+                            .orElseThrow(() -> new Exception("not save")), HttpStatus.OK);
+        }catch(Exception e) {
+            logger.error("Error: ",e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.jaav.sys.miniencuesta.ux.proxyclient.BusinessMiniEncuestaApi;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
@@ -19,17 +20,16 @@ public class ProxyClientConfig {
 
     //@Autowired
     //private LoggingInterceptor loggingInterceptor;
-
-    //@Value("${oneSignal.url}")
-    //private String url;
+    @Value("${application.http-client.business-me.url}")
+    private String baseUrlBusinessMe;
 
     @Bean
     @Autowired
-    public Retrofit retrofit(OkHttpClient client) {
+    public Retrofit retrofit(OkHttpClient client, Gson gson) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8088/api/business/miniencuesta/v1/")
+                .baseUrl(baseUrlBusinessMe)
                 .client(client)
-                //.addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(GsonConverterFactory.create())
                 //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
@@ -54,7 +54,7 @@ public class ProxyClientConfig {
     // Create a Bean for svcInvestmentClient and add it to SpringContext.
     @Bean
     public BusinessMiniEncuestaApi businessMiniEncuestaApi() {
-        return retrofit(client())
+        return retrofit(client(),gson())
                 .create(BusinessMiniEncuestaApi.class);
     }
 
